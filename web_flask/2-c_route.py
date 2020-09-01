@@ -9,7 +9,7 @@ ss = {'strict_slashes': False}
 @app.route('/', **ss)
 def index():
     """Index"""
-    return ('Hello HBNB!', **ss)
+    return ('Hello HBNB!')
 
 
 @app.route('/hbnb', **ss)
