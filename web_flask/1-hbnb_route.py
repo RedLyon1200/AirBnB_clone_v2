@@ -3,15 +3,16 @@
 from flask import Flask
 
 app = Flask(__name__)
+ss = {'strict_slashes': False}
 
 
-@app.route('/')
+@app.route('/', **ss)
 def index():
     """Index"""
     return ('Hello HBNB!')
 
 
-@app.route('/hbnb', strict_slashes=False)
+@app.route('/hbnb', **ss)
 def hbnb():
     """hbnb"""
     return 'HBNB'
