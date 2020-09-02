@@ -24,7 +24,7 @@ class City(BaseModel, Base):
             nullable=False
         )
         places = relationship(
-            'Place', back_populates='cities'
+            'Place', backref='cities', cascade='all, delete'
         )
     else:
         name = ''
