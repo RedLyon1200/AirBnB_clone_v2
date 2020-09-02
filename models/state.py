@@ -24,9 +24,10 @@ class State(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """initializes state"""
+        print(class_ for class_ in State.__dict__)
         super().__init__(*args, **kwargs)
 
-    if models.storage_type == 'fs':
+    if models.storage_type != 'db':
         @property
         def cities(self):
             """return the list of City objects from storage

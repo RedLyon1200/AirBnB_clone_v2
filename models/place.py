@@ -4,9 +4,8 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
-from models import storage_type
 
-if storage_type == "db":
+if getenv("HBNB_TYPE_STORAGE") == "db":
     place_amenity = Table(
         'place_amenity',
         Base.metadata,
@@ -36,7 +35,7 @@ class Place(BaseModel, Base):
 
     __tablename__ = "places"
 
-    if storage_type == "db":
+    if getenv("HBNB_TYPE_STORAGE") == "db":
         city_id = Column(
             String(60),
             ForeignKey("cities.id"),
@@ -88,11 +87,11 @@ class Place(BaseModel, Base):
             cascade="all, delete",
             backref="place")
 
-        """ amenities = relationship(
+        amenities = relationship(
             "Amenity",
             secondary="place_amenity",
             viewonly=False,
-            back_populates="place_amenities") """
+            back_populates="place_amenities")
 
     else:
         city_id = ""
