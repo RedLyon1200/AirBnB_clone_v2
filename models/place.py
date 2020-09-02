@@ -4,6 +4,9 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String, Integer, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
+import models
+from models.review import Review
+from models.amenity import Amenity
 
 if getenv("HBNB_TYPE_STORAGE") == "db":
     place_amenity = Table(
@@ -50,9 +53,7 @@ class Place(BaseModel, Base):
             String(128),
             nullable=False)
 
-        description = Column(
-            String(1024),
-            nullable=True)
+        description = Column(String(1024))
 
         number_rooms = Column(
             Integer,
@@ -74,24 +75,21 @@ class Place(BaseModel, Base):
             default=0,
             nullable=False)
 
-        latitude = Column(
-            Float,
-            nullable=True)
+        latitude = Column(Float)
 
-        longitude = Column(
-            Float,
-            nullable=True)
+        longitude = Column(Float)
 
         reviews = relationship(
-            "Review",
-            cascade="all, delete",
-            backref="place")
+            'Review',
+            backref='place'
+        )
 
         amenities = relationship(
-            "Amenity",
-            secondary="place_amenity",
-            viewonly=False,
-            back_populates="place_amenities")
+            'Amenity',
+            secondary='place_amenity',
+            backref='place_amenities',
+            viewonly=False
+        )
 
     else:
         city_id = ""
@@ -106,16 +104,17 @@ class Place(BaseModel, Base):
         longitude = 0.0
         amenity_ids = []
 
-    @property
-    def reviews(self):
-        """Method getter setter for return Cities
-        instance of current state_id"""
-        reviews = []
-        objs = models.storage.all(models.review.Review)
-        for val in objs:
-            if objs[key].place_id is self.id:
-                cities.append(objs[key])
-        return reviews
+    if models.storage_type == 'fs':
+        @property
+        def reviews(self):
+            """Method getter setter for return Cities
+            instance of current state_id"""
+            reviews = []
+            objs = models.storage.all(models.review.Review)
+            for val in objs:
+                if objs[key].place_id is self.id:
+                    cities.append(objs[key])
+            return reviews
 
     def __init__(self, *args, **kwargs):
         """ initializes obj place """
