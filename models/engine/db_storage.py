@@ -3,8 +3,6 @@
 from models.base_model import Base
 from models.state import State
 from models.city import City
-from models.place import Place
-from models import classes
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import scoped_session
@@ -86,3 +84,7 @@ class DBStorage:
             expire_on_commit=False
         )
         self.__session = scoped_session(session_factory)
+
+    def close(self):
+        """ """
+        self.__session.remove()

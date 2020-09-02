@@ -1,14 +1,11 @@
 #!/usr/bin/python3
 """ Imports """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Integer, Float, Table
-from sqlalchemy import ForeignKey
-from sqlalchemy import Table
+from sqlalchemy import Column, String, Integer, Float, Table, ForeignKey
 from sqlalchemy.orm import relationship
 from os import getenv
 
-
-if getenv('HBNB_TYPE_STORAGE') == 'db':
+if getenv("HBNB_TYPE_STORAGE") == "db":
     place_amenity = Table(
         'place_amenity',
         Base.metadata,

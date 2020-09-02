@@ -76,3 +76,7 @@ class FileStorage:
             temp = obj.__class__.__name__ + '.' + obj.id
             FileStorage.__objects.pop(temp, None)
             FileStorage.save(self)
+
+    def close(self):
+        """ close """
+        self.reload()
