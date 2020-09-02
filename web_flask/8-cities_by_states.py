@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+"""-*- coding: utf-8 -*-"""
+from flask import Flask
+from flask import render_template
+from models import storage
+from models.place import Place
+from models.state import State
+
+import models
+
+app = Flask(__name__)
+ss = {'strict_slashes': False}
+
+
+@app.teardown_appcontext
+def teardown_db(e):
+    """closes the storage"""
+    storage.close()
+
+
+@app.route('/cities_by_states', **ss)
+def cities_by_states():
+    """ """
+    states = sorted(list(storage.all(State).values()), key=lambda x: x.name)
+    print(state for state in states)
+    return render_template('7-states_list.html', states=states)
+
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)
