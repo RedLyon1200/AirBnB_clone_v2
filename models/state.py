@@ -6,6 +6,7 @@ from models.city import City
 from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from os import getenv
 import models
 
@@ -19,6 +20,7 @@ class State(BaseModel, Base):
             String(128),
             nullable=False
         )
+        cities = relationship('City', backref='state', cascade='all, delete')
     else:
         name = ''
 
