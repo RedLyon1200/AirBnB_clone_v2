@@ -23,9 +23,9 @@ class City(BaseModel, Base):
             ForeignKey('states.id'),
             nullable=False
         )
-        """ places = relationship(
+        places = relationship(
             'Place', back_populates='cities'
-        ) """
+        )
     else:
         name = ''
         state_id = ''
