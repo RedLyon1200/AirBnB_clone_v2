@@ -7,13 +7,14 @@ from sqlalchemy import String
 from sqlalchemy import ForeignKey
 from os import getenv
 from sqlalchemy.orm import relationship
+import models
 
 
 class City(BaseModel, Base):
     """ The city class, contains state ID and name """
     __tablename__ = 'cities'
 
-    if getenv('HBNB_TYPE_STORAGE') == 'db':
+    if models.storage_type == 'db':
         name = Column(
             String(128),
             nullable=False
@@ -23,9 +24,8 @@ class City(BaseModel, Base):
             ForeignKey('states.id'),
             nullable=False
         )
-        """ places = relationship(
-            'Place', back_populates='cities'
-        ) """
+        places = relationship('Place', backref='cities',
+                              cascade='all, delete-orphan')
     else:
         name = ''
         state_id = ''
