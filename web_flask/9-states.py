@@ -22,12 +22,17 @@ def states_list():
     return render_template('7-states_list.html', states=states)
 
 
-@app.route('/states/<id>')
-def state_by_id():
-    """ """
-    states = storage.all(State).values()
-    print(type(states))
+@app.route('/states/<id>', **ss)
+def state_by_id(id):
+    """ state by id """
+    states = storage.all(State)
+    state = states.get('State.{}'.format(id))
+
+    if state:
+        return render_template('9-states.html', state=state)
+    else:
+        return render_template('9-states.html')
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
