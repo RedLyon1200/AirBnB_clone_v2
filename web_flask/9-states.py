@@ -25,13 +25,11 @@ def states_list():
 @app.route('/states/<id>', **ss)
 def state_by_id(id):
     """ state by id """
-    states = storage.all(State)
-    state = states.get('State.{}'.format(id))
+    state = storage.all(State).get('State.{}'.format(id), defal)
 
     if state:
         return render_template('9-states.html', state=state)
-    else:
-        return render_template('9-states.html')
+    return render_template('9-states.html')
 
 
 if __name__ == "__main__":
