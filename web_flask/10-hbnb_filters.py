@@ -18,10 +18,10 @@ def teardown_db(e):
 
 @app.route('/hbnb_filters', **ss)
 def hbnb_filters():
+    """ dinamic filters """
     states = sorted(list(storage.all(State).values()), key=lambda x: x.name)
     amenities = sorted(list(storage.all(Amenity).values()),
                        key=lambda x: x.name)
-    print(type(amenities))
     return render_template(
         '10-hbnb_filters.html', states=states, amenities=amenities)
 
