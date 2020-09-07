@@ -6,31 +6,29 @@ from sqlalchemy.orm import relationship
 from os import getenv
 import models
 from models.review import Review
-from models.amenity import Amenity
 
-if getenv("HBNB_TYPE_STORAGE") == "db":
-    place_amenity = Table(
-        'place_amenity',
-        Base.metadata,
-        Column(
-            'place_id',
-            String(60),
-            ForeignKey(
-                'places.id',
-                onupdate='CASCADE',
-                ondelete='CASCADE'),
-            primary_key=True
-        ),
-        Column(
-            'amenity_id',
-            String(60),
-            ForeignKey(
-                'amenities.id',
-                onupdate='CASCADE',
-                ondelete='CASCADE'),
-            primary_key=True
-        )
+place_amenity = Table(
+    'place_amenity',
+    Base.metadata,
+    Column(
+        'place_id',
+        String(60),
+        ForeignKey(
+            'places.id',
+            onupdate='CASCADE',
+            ondelete='CASCADE'),
+        primary_key=True
+    ),
+    Column(
+        'amenity_id',
+        String(60),
+        ForeignKey(
+            'amenities.id',
+            onupdate='CASCADE',
+            ondelete='CASCADE'),
+        primary_key=True
     )
+)
 
 
 class Place(BaseModel, Base):
@@ -39,14 +37,14 @@ class Place(BaseModel, Base):
     __tablename__ = "places"
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
-        city_id = Column(
-            String(60),
-            ForeignKey("cities.id"),
-            nullable=False)
-
         user_id = Column(
             String(60),
             ForeignKey("users.id"),
+            nullable=False)
+
+        city_id = Column(
+            String(60),
+            ForeignKey("cities.id"),
             nullable=False)
 
         name = Column(
@@ -80,7 +78,7 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
 
         reviews = relationship(
-            'Rview'
+            'Review',
             backref='place',
             cascade='all, delete-orphan'
         )
@@ -121,8 +119,9 @@ class Place(BaseModel, Base):
 
         @property
         def amenities(self):
-            """Method that returnsthe list of Amenity instances based on the attribute
-            amenity_ids that contains all Amenity.id linked to the Place"""
+            """Method that returnsthe list of Amenity instances
+            based on the attribute amenity_ids that contains all Amenity.id
+            linked to the Place"""
             amenity_objs = []
             for amenity_id in self.amenity_ids:
                 key = 'Amenity.' + amenity_id
