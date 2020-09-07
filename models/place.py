@@ -80,16 +80,19 @@ class Place(BaseModel, Base):
         longitude = Column(Float)
 
         reviews = relationship(
-            'Review',
-            backref='place'
+            'Rview'
+            backref='place',
+            cascade='all, delete-orphan'
         )
 
         amenities = relationship(
             'Amenity',
-            secondary='place_amenity',
-            backref='place_amenities',
+            secondary=place_amenity,
+            back_populates='place_amenities',
             viewonly=False
         )
+
+        amenity_ids = []
 
     else:
         city_id = ""
@@ -115,6 +118,26 @@ class Place(BaseModel, Base):
                 if objs[key].place_id is self.id:
                     cities.append(objs[key])
             return reviews
+
+        @property
+        def amenities(self):
+            """Method that returnsthe list of Amenity instances based on the attribute
+            amenity_ids that contains all Amenity.id linked to the Place"""
+            amenity_objs = []
+            for amenity_id in self.amenity_ids:
+                key = 'Amenity.' + amenity_id
+                if key in FileStorage.__objects:
+                    amenity_objs.append(FileStorage.__objects[key])
+            return amenity_objs
+
+        @amenities.setter
+        def amenities(self, obj):
+            """
+            adds an Amenity.id to the attribute amenity_ids if obj is
+            an instance of Amenity
+            """
+            if isinstance(obj, Amenity):
+                self.amenity_ids.append(obj.id)
 
     def __init__(self, *args, **kwargs):
         """ initializes obj place """
