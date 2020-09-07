@@ -2,6 +2,7 @@ html {
     position: relative;
     padding-bottom: 100px;
     min-width: 100%;
+    min-height: 100vh;
 }
 
 .places {
